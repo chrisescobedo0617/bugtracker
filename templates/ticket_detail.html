@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a href="#" class="navbar-brand">Bug Tracker</a>
+    <ul class="navbar-nav">
+        <li class="nav_item">
+            <a href="/" class="nav-link">Home</a>
+        </li>
+        <li class="nav_item">
+            <a href="/submit/" class="nav-link">Submit Ticket</a>
+        </li>
+        <li class="nav_item">
+            <a href="/logout/" class="nav-link">Logout</a>
+        </li>
+    </ul>
+</nav>
+
+<div class="card shadow p-3 mb-5 bg-white rounded" style="width: 60rem; margin: auto; margin-top: 2rem; padding: 10px;">
+    <ul class="list-group list-group-flush">
+        {% if not ticket %}
+            <h1>The recipe you are looking for does not exist!</h1>
+        {% else %}
+            <li class="list-group-item">
+                <div style="overflow:hidden">
+                    <h1 class="card-title" style="float:left">{{ ticket.title }}</h1>
+                    
+                    <div class="btn-group" role="group" aria-label="Button nested dropdown" style=" position:absolute; right: 1rem; top: 1rem; margin-top: 0%;">
+                        <div class="btn-group" role="group">
+                            <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Actions
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                {% if ticket.status ==  "NW" %}
+                                    <a class="dropdown-item" href="/ticket/{{ ticket.id }}/edit/">Edit</a>
+                                    <a class="dropdown-item" href="/assign/{{ticket.id}}/">Assign Ticket to You</a>
+                                    <a class="dropdown-item" href="/invalid/{{ticket.id}}/">Mark Ticket as Invalid</a>
+                                {% elif ticket.status ==  "IP" %}
+                                <a class="dropdown-item" href="/ticket/{{ ticket.id }}/edit/">Edit</a>
+                                <a class="dropdown-item" href="/complete/{{ticket.id}}/">Complete</a>
+                                <a class="dropdown-item" href="/return/{{ticket.id}}/">Return Ticket</a>
+                                <a class="dropdown-item" href="/invalid/{{ticket.id}}/">Mark Ticket as Invalid</a>
+                                {% else %}
+                                <a class="dropdown-item" href="/ticket/{{ ticket.id }}/edit/">Edit</a>
+                                <a class="dropdown-item" href="/reopen/{{ticket.id}}/">Reopen</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+
+            <li class="list-group-item">
+                <div class="flex-container" style="display: flex;">
+                    <div>
+                        <h5>Info</h5>
+                        {% if ticket.assigned != None %}
+                            <p>Assigned to: {{ ticket.assigned }}</p>
+                        {% elif ticket.completed != null %}
+                            <p>Completed by: {{ ticket.completed }}</p>
+                        {% endif %}
+                        {% if ticket.status ==  "NW" %}
+                            <p>Status: New</p>
+                        {% elif ticket.status ==  "IP" %}
+                            <p>Status: In Progress</p>
+                        {% elif ticket.status ==  "IP" %}
+                            <p>Status: In Progress</p>
+                        {% elif ticket.status ==  "DN" %}
+                            <p>Status: Done</p>
+                        {% else %}
+                            <p>Status: Invalid</p>
+                        {% endif %}
+
+                    
+                        <p>Submitted on: {{ ticket.post_date }}</p>
+                        <p>Reported by: <a href="/user/{{ ticket.filing_user.id }}">{{ ticket.filing_user }}</a></p>
+                    </div>
+                    <div>
+                            <h5>Description</h5>
+                            <p>{{ ticket.description }}</p>
+                    </div>
+                </div>
+            </li>
+        {% endif %}
+    </ul>
+</div>
+
+{% endblock %}

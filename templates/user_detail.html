@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a href="#" class="navbar-brand">Bug Tracker</a>
+    <ul class="navbar-nav">
+        <li class="nav_item">
+            <a href="/" class="nav-link">Home</a>
+        </li>
+        <li class="nav_item">
+            <a href="/submit/" class="nav-link">Submit Ticket</a>
+        </li>
+        <li class="nav_item">
+            <a href="/logout/" class="nav-link">Logout</a>
+        </li>
+    </ul>
+</nav>
+
+<div class="card shadow p-3 mb-5 bg-white rounded" style="width: 60rem; margin: auto;  margin-top: 2rem;">
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            <div class="container">
+                <h1 class="card-title">{{ name.username }}</h1>
+                {% if name.bio %}
+                    <p class="card-text">{{ name.bio }}</p>
+                {% else %}
+                    <p class="card-text">User has no bio...</p>
+                {% endif %}
+
+                {% if name.email %}
+                    <p class="card-text">{{ name.email }}</p>
+                {% else %}
+                    <p class="card-text">User has no email...</p>
+                {% endif %}
+            </div>
+        </li>
+
+        <li class="list-group-item">
+            <div class="container">
+                <h2>Filed Tickets</h2>
+                <table class="table table-sm">
+                    {% if user_tickets %}
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Title</th> 
+                            <th>Assigned To</th>
+                            <th>Reported By</th>
+                        <th>Ticket Age</th>
+                        </tr>
+                    </thead>
+                    {% for ticket in user_tickets %}
+                    <tbody>
+                        <tr>
+                            <th>{{ ticket.id }}</th>
+                                <th><a href="/ticket/{{ ticket.id }}/">{{ ticket.title }}</a></th>
+                                {% if ticket.assigned == None %} 
+                                <th></th>
+                                {% else %}
+                                <th>{{ ticket.assigned }}</th>
+                                {% endif %}
+                                <th><a href="/user/{{ ticket.filing_user.id }}">{{ ticket.filing_user }}</a></th>
+                                <th>{{ ticket.days_active }} day(s)</th>
+                            </tr>
+                        </tbody>
+                    {% endfor %}
+                    {% else %}
+                        <h4>No Tickets Completed</h4>
+                    {% endif %}
+                </table>
+
+
+                <h2>In Progress Tickets</h2>
+                <table class="table table-sm">
+                    {% if ip_tickets %}
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Title</th> 
+                            <th>Assigned To</th>
+                            <th>Reported By</th>
+                            <th>Ticket Age</th>
+                        </tr>
+                    </thead>
+                    {% for ticket in ip_tickets %}
+                    <tbody>
+                        <tr>
+                            <th>{{ ticket.id }}</th>
+                                <th><a href="/ticket/{{ ticket.id }}/">{{ ticket.title }}</a></th>
+                                {% if ticket.assigned == None %} 
+                                    <th></th>
+                                {% else %}
+                                <th>{{ ticket.assigned }}</th>
+                                {% endif %}
+                                <th><a href="/user/{{ ticket.filing_user.id }}">{{ ticket.filing_user }}</a></th>
+                                <th>{{ ticket.days_active }} day(s)</th>
+                            </tr>
+                        </tbody>
+                    {% endfor %}
+                    {% else %}
+                        <h5>No Tickets Completed</h5>
+                    {% endif %}
+                </table>
+
+                <h2>Completed Tickets</h2>
+                <table class="table table-sm">
+                    {% if completed_tickets or invalid_tickets %}
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>Title</th> 
+                                <th>Assigned To</th>
+                                <th>Reported By</th>
+                                <th>Ticket Age</th>
+                            </tr>
+                        </thead>
+                        {% if completed_tickets %}
+                            {% for ticket in completed_tickets %}
+                            <tbody>
+                                <tr>
+                                    <th>{{ ticket.id }}</th>
+                                        <th><a href="/ticket/{{ ticket.id }}/">{{ ticket.title }}</a></th>
+                                        {% if ticket.assigned == None %} 
+                                        <th></th>
+                                        {% else %}
+                                        <th>{{ ticket.assigned }}</th>
+                                        {% endif %}
+                                        <th><a href="/user/{{ ticket.filing_user.id }}">{{ ticket.filing_user }}</a></th>
+                                        <th>{{ ticket.days_active }} day(s)</th>
+                                    </tr>
+                                </tbody>
+                            {% endfor %}
+                        {% endif %}
+                        {% if invalid_tickets %}
+                            {% for ticket in invalid_tickets %}
+                            <tbody>
+                                <tr>
+                                    <th>{{ ticket.id }}</th>
+                                        <th><a href="/ticket/{{ ticket.id }}/">{{ ticket.title }}</a></th>
+                                        {% if ticket.assigned == None %} 
+                                        <th></th>
+                                        {% else %}
+                                        <th>{{ ticket.assigned }}</th>
+                                        {% endif %}
+                                        <th><a href="/user/{{ ticket.filing_user.id }}">{{ ticket.filing_user }}</a></th>
+                                        <th>{{ ticket.days_active }} day(s)</th>
+                                    </tr>
+                                </tbody>
+                            {% endfor %}
+                        {% endif %}
+                        {% else %}
+                            <h5>No Tickets Completed</h5>
+                    {% endif %}
+                    </tr>
+                </table>
+            </div>
+        </li>
+    </ul>
+</div>
+
+{%  endblock%}
