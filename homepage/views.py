@@ -95,7 +95,7 @@ def ticket_edit_view(request, ticket_id):
 def user_detail(request, user_id):
     name = MyUser.objects.filter(id=user_id).first()
     user_tickets = Ticket.objects.filter(filing_user=name.id)
-    inprogress_tickets = Ticket.objects.filter(status="IP", filing_user=name.id)
+    inprogress_tickets = Ticket.objects.filter(status="IP", assigned=name)
     completed_tickets = Ticket.objects.filter(status="DN", filing_user=name.id)
     invalid_tickets = Ticket.objects.filter(status="IN", filing_user=name.id)
     return render (
